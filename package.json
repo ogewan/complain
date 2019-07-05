@@ -1,0 +1,19 @@
+{
+  "name": "complain",
+  "version": "0.0.0",
+  "description": "report to github issue with screenshot",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ogewan/complain.git"
+  },
+  "author": "Seun Ogedengbe (Ogewan)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ogewan/complain/issues"
+  },
+  "homepage": "https://github.com/ogewan/complain#readme"
+}

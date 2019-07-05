@@ -1,0 +1,78 @@
+<html>
+
+<head>
+    <style>
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+        }
+    </style>
+    <script src="html2canvas.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div class="center">
+        <p><button onclick="complain()">HELP!</button></p>
+        <img src="photos-21-3.jpg">
+    </div>
+</body>
+<script>
+    //le javaScript
+    let
+        secret = {
+            ghToken: "810fa94eb683396ee0168acce48000ca6570ab03",
+            imgurCID: "c8e9308a37a0ee0"
+        },
+        post = async(url, data, headers = {}) => {
+            return await axios({
+                method: 'post',
+                url,
+                headers,
+                data,
+            });
+        },
+        submitGithub = async e => {
+            let
+                title = `${e[1]}: ${e[2]}|${e[5]}`,
+                body = "| Email | Name | Type |\n" +
+                "|---|---|---|\n" +
+                `| ${e[2]} | ${e[1]} | ${e[3]} |\n\n` +
+                `Description: ${e[4]}` +
+                `![Imgur](${e[6]})`,
+                payload = {
+                    "title": title,
+                    "body": body,
+                    "labels": ["Type: Report"],
+                },
+                url = `https://api.github.com/repos/ogewan/neuroglancer/issues?access_token=${secret.ghToken}`;
+
+            return await post(url, payload);
+        },
+        uploadScreenshot = async image => {
+            image = image || "iVBORw0KGgoAAAANSUhEUgAAABUAAAAYCAYAAAAVibZIAAAFKElEQVRIS5WV228cZxnGf9+cdnd2dte73pPPcZwSu4kbSHBbQsNFSw8qElTtTS9LWwFqWsQ1EhL/AxcIoariEtESESk0BSSUNHWTOA1VCKmTbL3EydqOd7Nn72kOH5oJSWxuSt7RSKOZ732+93mf55tXvP/hj6REQfiXp6N1RihcvUOlVsd2Bxh6mLFsjpe/9wKKKvl3aY0vrl7jwvklBp0uQgEhwPUEW20XMTAQ73/4YymFQDg6k7EDTI/uo7xZwV/tug5WzCIaiWDoOgiJxA/BtcvLLJ44iaqppCfHcESICxeu0mp2EB+c/In0XIVM+BHmdx1GVZQg7avCc1xWC0V0I0x6dASExtnFz7i+XED88aO3JE6IA+NPMxzPfxXWju/dTg+h6IQjkeC9vEsDceyjo9JU8uwfP0I0HH0oUOlJmq0OiaHkjjxx7M9vySFjhvmpw2ia9lCg/uJGvU1iKOW3+X6IYyeOymToazw2/STK/9nP7Ts3ai0SSR/0Aao4/pe3pcVeDuxeQFXVh660XmtixYYQirifL0787acyrR9kZmwW7X9APc+j37dRBAwch1g0uoOm769ypYbtKEQtEysaxrZtxJ/++o7cqk2xJzVDKh4mncn4OgYV12pN1jaqRCMa65s1nji0H0V9QNMXqlKu4igGfVuih0JEdBVx7OTP5J1KnnEjx+6JHEOpJLqu3T0lrke11qbX65JOJwmHjO2to+NbSuhoRojizRu4WhdNGIhzp96VhbUak9YoEVPDUFWyuSzhcDiodjCw6XY6xBNxxDYx/A07Wz3CpoXj2NSbTbqyiZFqIirXzsj18m1Mw6TaKKOrEdLDaaJWdAfIdgUd26VWbQSqG4YR9HkwGGA7Dt1BG9FYOSe3trrYjm/kOksXPmf+4EGmRnPomrqDridd7jT7FIolwt6AXC5LfnSMe05stVqYZhTRXDkn/R026lt8fPoT5p56nvToBIXLl5ibyMNWOfCgNOKst3rEs6PEEknOfPA7ttaLzH7jcbL5PEOJGIoisKL/BfXPbKkjKXcgPzVNtVZnY/UW83tmMPoVHMfFNvNcX10lErcYGx2hfGOF1WKB5S+usLl+m/FchldffpFcZvhupb6Brt9u4w1NYFkmxRs32SyXeergISKKxLb7uIbJ+X/+C0NXmdk1FVT1ZekWkzErEPfLa8ss7Jshbhr36LtcKpRIzy5QWVuj2ulSbTV57lvfJh6PBxo1221OXbxIKh5jyDJp3CzgKRr75uaxYnEa1dvQrZJNJu6C1nsuK3WHTrPBrSv/YGLhGWqNJkcOLQQu8KPT63H64ufEYyZJK0yvvI7daZIaHsEM6WjCpdOssWtiDFEtnJWbA4PV9TKXTv4eK51j7rlXKZXW+c43H4D2+wP+vrTEWD5HOKQiPQ/XsVFcm5xoo+LRbPeIJ5KIxePvyY8/OYsc9FDsFonJWZ545U0uX77C008exoxG8YeI7bicOr/E7l3juK5NKpkKDrP/vLJ0hr1TWYTrsFGpI37++ktSuvZ9b2emZ3n2tXdYKd7g8f2PYYTC97165rMlHtkzw/lPz7Jn7lH6CtxptRhWFPbmh6lu3GLtZhHxy9d/IF3pBnQ8ID29j2d/eJRup89EJkdk26hYLhZIZ9P89le/JrfwdTJjIyiqBrbNfCbL7nSaE8f/gPjFa98PRqTruQHN4elHef6NtxFSIRWNEwp+IiK4VzfWMGMW7/3mXWa+e4SQeW82SQalEo3F0yx/ush/AP+oP8Ye05KeAAAAAElFTkSuQmCC";
+
+            let
+                url = "https://api.imgur.com/3/image",
+                payload = {
+                    image
+                },
+                headers = {
+                    "Authorization": "Client-ID " + "c8e9308a37a0ee0"
+                };
+
+            return await post(url, payload, headers);
+        },
+        complain = async(form = [0, 1, 2, 3, 4, 5]) => {
+            let
+                screenshot = (await html2canvas(document.body)).toDataURL(),
+                imgurRes = await uploadScreenshot(screenshot.slice(screenshot.indexOf("data:image/png;base64,") + 22)),
+                gitRes = await submitGithub([...form, imgurRes.data.data.link]);
+
+            alert("Right into the complaint box!");
+        };
+</script>
+
+</html>
